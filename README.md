@@ -16,8 +16,8 @@ Construída com **Clean Architecture**, **SOLID principles** e **Python 3.11+**.
 - [Configuração](#-configuração)
 - [Uso](#-uso)
 - [Endpoints](#-endpoints)
+- [Exemplos de Uso](#-exemplos-de-uso)
 - [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Desenvolvimento](#-desenvolvimento)
 - [Deploy](#-deploy)
 - [Troubleshooting](#-troubleshooting)
 
@@ -27,7 +27,7 @@ Construída com **Clean Architecture**, **SOLID principles** e **Python 3.11+**.
 
 - ✅ **Clean Architecture** com separação clara de responsabilidades
 - ✅ **SOLID Principles** aplicados em toda a codebase
-- ✅ **Few-Shot Learning** com exemplos configuráveis
+- ✅ **Few-Shot Learning** com exemplos configuráveis (25 exemplos em português)
 - ✅ **Gemini 2.5 Flash** integração assíncrona
 - ✅ **FastAPI** com validação Pydantic V2
 - ✅ **Logging Estruturado** (JSON) para observabilidade
@@ -38,6 +38,7 @@ Construída com **Clean Architecture**, **SOLID principles** e **Python 3.11+**.
 - ✅ **Documentação Automática** (OpenAPI/Swagger)
 - ✅ **Type Hints** completos
 - ✅ **Async/Await** para I/O não-bloqueante
+- ✅ **Docker Ready** com docker-compose
 
 ---
 
@@ -84,38 +85,38 @@ Construída com **Clean Architecture**, **SOLID principles** e **Python 3.11+**.
 
 ## 🛠️ Tecnologias
 
-| Categoria | Tecnologia |
-|-----------|------------|
-| **Framework** | FastAPI 0.115.5 |
-| **Validação** | Pydantic V2 |
-| **LLM** | Google Gemini 2.5 Flash |
-| **Server** | Uvicorn (ASGI) |
-| **Logging** | python-json-logger |
-| **Async HTTP** | httpx |
-| **Python** | 3.11+ |
+| Categoria | Tecnologia | Versão |
+|-----------|------------|--------|
+| **Framework** | FastAPI | 0.115.5 |
+| **Validação** | Pydantic V2 | 2.10.3 |
+| **LLM** | Google Gemini 2.5 Flash | - |
+| **Server** | Uvicorn (ASGI) | 0.32.1 |
+| **Logging** | python-json-logger | 3.2.1 |
+| **Async HTTP** | httpx | 0.28.1 |
+| **Python** | 3.10+ | - |
 
 ---
 
 ## 📦 Pré-requisitos
 
-- **Python 3.11+** instalado
+- **Python 3.10+** instalado
 - **Google Gemini API Key** ([Obtenha aqui](https://makersuite.google.com/app/apikey))
-- **Git** (opcional)
+- **pip** atualizado
 
 ---
 
 ## 🚀 Instalação
 
-### 1. Clone o repositório
+### **1. Clone o repositório**
 
 ```bash
 git clone https://github.com/seu-usuario/intent-classifier-api.git
 cd intent-classifier-api
 ```
 
-### 2. Crie um ambiente virtual
+### **2. Crie um ambiente virtual**
 
-```bash
+```powershell
 # Windows (PowerShell)
 python -m venv venv
 .\venv\Scripts\Activate.ps1
@@ -125,7 +126,7 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 3. Instale as dependências
+### **3. Instale as dependências**
 
 ```bash
 pip install --upgrade pip
@@ -136,49 +137,86 @@ pip install -r requirements.txt
 
 ## ⚙️ Configuração
 
-### 1. Configure as variáveis de ambiente
+### **1. Configure as variáveis de ambiente**
 
 ```bash
 # Copie o arquivo de exemplo
 cp .env.example .env
-
-# Edite o arquivo .env e adicione sua API Key
-# GEMINI_API_KEY=sua_chave_aqui
 ```
 
-### 2. Variáveis obrigatórias
+### **2. Edite o arquivo `.env` e adicione sua API Key**
 
 ```bash
-GEMINI_API_KEY=your_gemini_api_key_here  # ⚠️ OBRIGATÓRIO
-```
+# OBRIGATÓRIO
+GEMINI_API_KEY=sua_chave_api_do_gemini_aqui
 
-### 3. Variáveis opcionais (com defaults)
-
-```bash
+# Opcional (já possui defaults)
 GEMINI_MODEL=gemini-2.5-flash
 GEMINI_TEMPERATURE=0.3
-GEMINI_MAX_TOKENS=512
-LOG_LEVEL=INFO
 ENVIRONMENT=development
+DEBUG=true
 ```
+
+> 🔑 **Importante**: Obtenha sua API Key gratuita em: https://makersuite.google.com/app/apikey
+
+### **3. Variáveis Disponíveis**
+
+| Variável | Descrição | Default | Obrigatória |
+|----------|-----------|---------|-------------|
+| `GEMINI_API_KEY` | Chave de API do Google Gemini | - | ✅ Sim |
+| `GEMINI_MODEL` | Modelo Gemini a usar | `gemini-2.5-flash` | ❌ |
+| `GEMINI_TEMPERATURE` | Temperatura (0.0-2.0) | `0.3` | ❌ |
+| `GEMINI_MAX_TOKENS` | Máximo de tokens | `512` | ❌ |
+| `ENVIRONMENT` | Ambiente (development/production) | `development` | ❌ |
+| `DEBUG` | Modo debug | `false` | ❌ |
+| `LOG_LEVEL` | Nível de log | `INFO` | ❌ |
+| `PORT` | Porta do servidor | `8000` | ❌ |
 
 ---
 
 ## 💻 Uso
 
-### Iniciar o servidor
+### **Iniciar o servidor**
 
-```bash
-# Modo desenvolvimento (com auto-reload)
-python src/main.py
+```powershell
+# Adicione o path ao PYTHONPATH
+$env:PYTHONPATH = (Get-Location).Path
 
-# Ou usando uvicorn diretamente
+# Inicie com uvicorn
 uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### Acessar a documentação
+**Ou crie um arquivo `run.py` na raiz:**
 
-Abra no navegador:
+```python
+import sys
+from pathlib import Path
+
+# Adiciona o diretório raiz ao PYTHONPATH
+root_dir = Path(__file__).parent
+sys.path.insert(0, str(root_dir))
+
+if __name__ == "__main__":
+    import uvicorn
+    from src.core.config import settings
+    
+    uvicorn.run(
+        "src.main:app",
+        host=settings.host,
+        port=settings.port,
+        reload=settings.reload,
+        log_level=settings.log_level.lower()
+    )
+```
+
+E execute:
+```powershell
+python run.py
+```
+
+### **Acessar a documentação**
+
+Após iniciar o servidor, acesse:
 
 - **Swagger UI**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
@@ -188,99 +226,17 @@ Abra no navegador:
 
 ## 📡 Endpoints
 
-### 1. Classificar Intenção (Único)
+### **1. Health Check**
 
-```bash
-POST /api/v1/classify
-```
-
-**Request:**
-```json
-{
-  "text": "Olá, bom dia!",
-  "request_id": "req_001",
-  "include_raw_response": false,
-  "include_metadata": false
-}
-```
-
-**Response:**
-```json
-{
-  "intent": "greeting",
-  "confidence": 0.95,
-  "confidence_level": "high",
-  "processing_time_ms": 234.56,
-  "timestamp": "2026-01-22T18:36:00.000000",
-  "request_id": "req_001"
-}
-```
-
-### 2. Classificar em Lote
-
-```bash
-POST /api/v1/classify/batch
-```
-
-**Request:**
-```json
-{
-  "texts": [
-    "Bom dia!",
-    "Preciso de ajuda",
-    "Obrigado!"
-  ],
-  "request_id": "batch_001"
-}
-```
-
-**Response:**
-```json
-{
-  "results": [...],
-  "total_processed": 3,
-  "total_successful": 3,
-  "total_failed": 0,
-  "total_processing_time_ms": 456.78,
-  "timestamp": "2026-01-22T18:36:00.000000",
-  "request_id": "batch_001"
-}
-```
-
-### 3. Informações do Modelo
-
-```bash
-GET /api/v1/classify/model/info
-```
-
-**Response:**
-```json
-{
-  "model_name": "gemini-2.5-flash",
-  "provider": "Google Gemini",
-  "temperature": 0.3,
-  "max_tokens": 512,
-  "examples_count": 25,
-  "supported_intents": [
-    "greeting", "farewell", "question", "complaint",
-    "compliment", "request", "information", "help",
-    "cancellation", "confirmation", "unknown"
-  ],
-  "timestamp": "2026-01-22T18:36:00.000000"
-}
-```
-
-### 4. Health Check
-
-```bash
+```http
 GET /health
 ```
 
-**Response:**
+**Resposta:**
 ```json
 {
   "status": "healthy",
-  "timestamp": "2026-01-22T18:36:00.000000",
+  "timestamp": "2026-01-22T19:44:00.000000",
   "version": "1.0.0",
   "checks": {
     "llm_provider": true,
@@ -297,6 +253,166 @@ GET /health
 
 ---
 
+### **2. Classificar Intenção (Único)**
+
+```http
+POST /api/v1/classify
+```
+
+**Request Body:**
+```json
+{
+  "text": "Olá, bom dia!",
+  "request_id": "req_001",
+  "include_raw_response": false,
+  "include_metadata": false
+}
+```
+
+**Response:**
+```json
+{
+  "intent": "greeting",
+  "confidence": 0.95,
+  "confidence_level": "high",
+  "processing_time_ms": 1109.02,
+  "timestamp": "2026-01-22T19:44:00.000000",
+  "request_id": "req_001"
+}
+```
+
+---
+
+### **3. Classificar em Lote**
+
+```http
+POST /api/v1/classify/batch
+```
+
+**Request Body:**
+```json
+{
+  "texts": [
+    "Bom dia!",
+    "Como faço para rastrear?",
+    "Obrigado!"
+  ],
+  "request_id": "batch_001"
+}
+```
+
+**Response:**
+```json
+{
+  "results": [
+    {
+      "intent": "greeting",
+      "confidence": 0.95,
+      "confidence_level": "high",
+      "processing_time_ms": 1649.69
+    },
+    {
+      "intent": "question",
+      "confidence": 0.95,
+      "confidence_level": "high",
+      "processing_time_ms": 1470.58
+    },
+    {
+      "intent": "compliment",
+      "confidence": 0.95,
+      "confidence_level": "high",
+      "processing_time_ms": 1301.95
+    }
+  ],
+  "total_processed": 3,
+  "total_successful": 3,
+  "total_failed": 0,
+  "total_processing_time_ms": 4930.59,
+  "timestamp": "2026-01-22T19:44:00.000000",
+  "request_id": "batch_001"
+}
+```
+
+---
+
+### **4. Informações do Modelo**
+
+```http
+GET /api/v1/classify/model/info
+```
+
+**Response:**
+```json
+{
+  "model_name": "gemini-2.5-flash",
+  "provider": "Google Gemini",
+  "temperature": 0.3,
+  "max_tokens": 512,
+  "examples_count": 25,
+  "supported_intents": [
+    "greeting", "farewell", "question", "complaint",
+    "compliment", "request", "information", "help",
+    "cancellation", "confirmation", "unknown"
+  ],
+  "timestamp": "2026-01-22T19:44:00.000000"
+}
+```
+
+---
+
+## 🧪 Exemplos de Uso
+
+### **Python (requests)**
+
+```python
+import requests
+
+# Classificação única
+response = requests.post(
+    "http://localhost:8000/api/v1/classify",
+    json={"text": "Olá, bom dia!"}
+)
+print(response.json())
+
+# Classificação em lote
+response = requests.post(
+    "http://localhost:8000/api/v1/classify/batch",
+    json={
+        "texts": [
+            "Bom dia!",
+            "Preciso de ajuda",
+            "Obrigado!"
+        ]
+    }
+)
+print(response.json())
+```
+
+### **cURL**
+
+```bash
+# Classificação única
+curl -X POST "http://localhost:8000/api/v1/classify" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Olá, bom dia!"}'
+
+# Health check
+curl http://localhost:8000/health
+```
+
+### **PowerShell**
+
+```powershell
+# Health Check
+Invoke-RestMethod -Uri http://localhost:8000/health
+
+# Classificação
+$body = '{"text": "Olá, bom dia!"}' 
+Invoke-RestMethod -Uri http://localhost:8000/api/v1/classify -Method Post -Body $body -ContentType "application/json"
+```
+
+---
+
 ## 📂 Estrutura do Projeto
 
 ```
@@ -305,116 +421,125 @@ intent-classifier-api/
 │   ├── api/
 │   │   ├── v1/
 │   │   │   ├── endpoints/
-│   │   │   │   └── classifier.py    # Rotas REST
-│   │   │   └── dependencies.py      # Injeção de dependências
+│   │   │   │   └── classifier.py      # Rotas REST
+│   │   │   └── dependencies.py        # Injeção de dependências
 │   │   └── middlewares/
-│   │       └── logging_middleware.py # Logging automático
+│   │       └── logging_middleware.py  # Logging automático
 │   ├── core/
-│   │   ├── config.py                # Configurações
-│   │   ├── logger.py                # Logging estruturado
-│   │   └── exceptions.py            # Exceções customizadas
+│   │   ├── config.py                  # Configurações
+│   │   ├── logger.py                  # Logging estruturado
+│   │   └── exceptions.py              # Exceções customizadas
 │   ├── domain/
-│   │   ├── models.py                # Modelos de domínio
-│   │   └── interfaces.py            # Abstrações/Contratos
+│   │   ├── models.py                  # Modelos de domínio
+│   │   └── interfaces.py              # Abstrações/Contratos
 │   ├── services/
-│   │   ├── intent_service.py        # Lógica de negócio
-│   │   └── prompt_manager.py        # Gerenciamento de prompts
+│   │   ├── intent_service.py          # Lógica de negócio
+│   │   └── prompt_manager.py          # Gerenciamento de prompts
 │   ├── providers/
 │   │   └── gemini/
-│   │       └── client.py            # Cliente Gemini
+│   │       └── client.py              # Cliente Gemini
 │   ├── schemas/
-│   │   ├── request.py               # DTOs de entrada
-│   │   └── response.py              # DTOs de saída
+│   │   ├── request.py                 # DTOs de entrada
+│   │   └── response.py                # DTOs de saída
 │   ├── data/
-│   │   └── examples.json            # Exemplos few-shot
-│   └── main.py                      # Entry point
-├── .env.example                     # Variáveis de ambiente
-├── requirements.txt                 # Dependências
-└── README.md                        # Este arquivo
+│   │   └── examples.json              # 25 exemplos few-shot (pt-BR)
+│   └── main.py                        # Entry point
+├── .env.example                       # Template de variáveis de ambiente
+├── .gitignore                         # Arquivos ignorados pelo Git
+├── requirements.txt                   # Dependências Python
+├── Dockerfile                         # Container Docker
+├── docker-compose.yml                 # Orquestração Docker
+├── pyproject.toml                     # Configuração do projeto
+└── README.md                          # Este arquivo
 ```
 
 ---
 
-## 🔧 Desenvolvimento
+## 🎯 Intenções Suportadas
 
-### Adicionar novos exemplos
+A API classifica textos em 11 categorias:
 
-Edite `src/data/examples.json`:
-
-```json
-{
-  "examples": [
-    {
-      "user_input": "Seu novo exemplo",
-      "intent": "greeting",
-      "confidence": 0.95,
-      "metadata": {}
-    }
-  ]
-}
-```
-
-### Adicionar nova intenção
-
-1. Edite `src/domain/models.py`:
-```python
-class IntentType(str, Enum):
-    # ... existing intents
-    NEW_INTENT = "new_intent"
-```
-
-2. Adicione exemplos em `src/data/examples.json`
-
-3. Atualize a system instruction em `src/services/prompt_manager.py`
+| Intenção | Descrição | Exemplo |
+|----------|-----------|---------|
+| `greeting` | Saudações | "Olá, bom dia!" |
+| `farewell` | Despedidas | "Até logo, obrigado!" |
+| `question` | Perguntas | "Como faço para rastrear?" |
+| `complaint` | Reclamações | "Produto com defeito!" |
+| `compliment` | Elogios | "Muito obrigado!" |
+| `request` | Solicitações | "Quero trocar o produto" |
+| `information` | Informações | "Meu pedido é #12345" |
+| `help` | Ajuda | "Preciso de ajuda" |
+| `cancellation` | Cancelamentos | "Quero cancelar" |
+| `confirmation` | Confirmações | "Sim, confirmo" |
+| `unknown` | Não identificado | Textos ambíguos |
 
 ---
 
-## 🐳 Deploy
+## 🐳 Deploy com Docker
 
-### Docker (em breve)
+### **Build e Run**
 
 ```bash
+# Build da imagem
 docker build -t intent-classifier-api .
+
+# Run do container
 docker run -p 8000:8000 --env-file .env intent-classifier-api
 ```
 
-### Produção
+### **Docker Compose**
 
 ```bash
-# Instale dependências
-pip install -r requirements.txt
+# Inicie todos os serviços
+docker-compose up -d
 
-# Configure variáveis de ambiente
-export ENVIRONMENT=production
-export DEBUG=false
-export GEMINI_API_KEY=your_key
+# Veja os logs
+docker-compose logs -f
 
-# Inicie com Gunicorn
-gunicorn src.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
+# Pare os serviços
+docker-compose down
 ```
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Erro: "GEMINI_API_KEY não pode estar vazia"
+### **Erro: "GEMINI_API_KEY não pode estar vazia"**
 
 ✅ **Solução**: Configure a variável `GEMINI_API_KEY` no arquivo `.env`
 
-### Erro: "Arquivo de exemplos não encontrado"
+```bash
+GEMINI_API_KEY=sua_chave_aqui
+```
+
+### **Erro: "Module not found: 'src'"**
+
+✅ **Solução**: Configure o PYTHONPATH antes de executar
+
+```powershell
+# PowerShell
+$env:PYTHONPATH = (Get-Location).Path
+uvicorn src.main:app --reload
+
+# Linux/macOS
+export PYTHONPATH=$(pwd)
+uvicorn src.main:app --reload
+```
+
+### **Erro: "Arquivo de exemplos não encontrado"**
 
 ✅ **Solução**: Verifique se `src/data/examples.json` existe
 
-### Erro: "Module not found"
+### **Performance lenta (>3s por requisição)****
 
-✅ **Solução**: Certifique-se de que todas as dependências estão instaladas:
-```bash
-pip install -r requirements.txt
-```
+✅ **Soluções**:
+- Reduza `GEMINI_TEMPERATURE` para 0.1
+- Reduza `MAX_EXAMPLES_IN_PROMPT` para 3
+- Aumente `GEMINI_TIMEOUT` para 60
 
-### Performance lenta
+### **Erro: "Rate limit excedido"**
 
-✅ **Solução**: Ajuste `GEMINI_TEMPERATURE` para valores menores (ex: 0.1) ou reduza `MAX_EXAMPLES_IN_PROMPT`
+✅ **Solução**: Aguarde alguns segundos entre requisições ou use a API Key paga do Gemini
 
 ---
 
@@ -424,18 +549,21 @@ Este projeto está sob a licença MIT.
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Desenvolvido com
 
-Desenvolvido seguindo **Clean Architecture** e **SOLID principles**.
+- ❤️ **Clean Architecture**
+- 🎯 **SOLID Principles**
+- 🚀 **FastAPI + Gemini 2.5 Flash**
+- 🐍 **Python 3.10+**
 
 ---
 
 ## 🤝 Contribuindo
 
-Contribuições são bem-vindas! Por favor:
+Contribuições são bem-vindas! Para contribuir:
 
 1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/NovaFeature`)
+2. Crie uma branch (`git checkout -b feature/NovaFeature`)
 3. Commit suas mudanças (`git commit -m 'Add: Nova feature'`)
 4. Push para a branch (`git push origin feature/NovaFeature`)
 5. Abra um Pull Request
@@ -444,7 +572,9 @@ Contribuições são bem-vindas! Por favor:
 
 ## 📞 Suporte
 
-Para questões e suporte, abra uma [issue](https://github.com/seu-usuario/intent-classifier-api/issues).
-```
+Para dúvidas, problemas ou sugestões, abra uma [issue](https://github.com/seu-usuario/intent-classifier-api/issues).
 
-***
+---
+
+**⭐ Se este projeto foi útil, considere dar uma estrela no GitHub!**
+```

@@ -1,3 +1,7 @@
+"""
+Configurações centralizadas da aplicação.
+Gerencia variáveis de ambiente e settings usando Pydantic V2.
+"""
 from functools import lru_cache
 from typing import Literal
 
@@ -72,14 +76,14 @@ class Settings(BaseSettings):
         description="Formato do log (json ou text)"
     )
     
-    # CORS Configuration
-    cors_origins: list[str] = Field(
-        default=["*"],
-        description="Origens permitidas para CORS"
+    # CORS Configuration - CORRIGIDO para aceitar string separada por vírgulas
+    cors_origins: str = Field(
+        default="*",
+        description="Origens permitidas para CORS (separadas por vírgula)"
     )
     cors_allow_credentials: bool = Field(default=True)
-    cors_allow_methods: list[str] = Field(default=["*"])
-    cors_allow_headers: list[str] = Field(default=["*"])
+    cors_allow_methods: str = Field(default="*")
+    cors_allow_headers: str = Field(default="*")
     
     # Rate Limiting
     rate_limit_enabled: bool = Field(default=True, description="Habilitar rate limiting")
@@ -105,7 +109,7 @@ class Settings(BaseSettings):
     @field_validator("gemini_model")
     @classmethod
     def validate_model_name(cls, v: str) -> str:
-        
+        """Valida se o modelo é compatível."""
         allowed_models = [
             "gemini-2.5-flash",
             "gemini-2.0-flash",
@@ -123,6 +127,25 @@ class Settings(BaseSettings):
     def validate_environment(cls, v: str) -> str:
         """Ajusta configurações baseadas no ambiente."""
         return v.lower()
+    
+    # Métodos auxiliares para retornar listas
+    def get_cors_origins_list(self) -> list[str]:
+        """Retorna lista de origens CORS."""
+        if self.cors_origins == "*":
+            return ["*"]
+        return [origin.strip() for origin in self.cors_origins.split(",")]
+    
+    def get_cors_methods_list(self) -> list[str]:
+        """Retorna lista de métodos CORS."""
+        if self.cors_allow_methods == "*":
+            return ["*"]
+        return [method.strip() for method in self.cors_allow_methods.split(",")]
+    
+    def get_cors_headers_list(self) -> list[str]:
+        """Retorna lista de headers CORS."""
+        if self.cors_allow_headers == "*":
+            return ["*"]
+        return [header.strip() for header in self.cors_allow_headers.split(",")]
 
 
 @lru_cache

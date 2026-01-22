@@ -1,0 +1,242 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "intent-classifier-api"
+version = "1.0.0"
+description = "API RESTful para classificação de intenção usando Few-Shot Prompting com Gemini 2.5 Flash"
+readme = "README.md"
+authors = [
+    { name = "Seu Nome", email = "seu-email@exemplo.com" }
+]
+maintainers = [
+    { name = "Seu Nome", email = "seu-email@exemplo.com" }
+]
+license = { text = "MIT" }
+keywords = [
+    "fastapi",
+    "gemini",
+    "llm",
+    "intent-classification",
+    "few-shot-learning",
+    "clean-architecture",
+    "ai",
+    "nlp"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: FastAPI",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Operating System :: OS Independent",
+    "Typing :: Typed"
+]
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi==0.115.5",
+    "uvicorn[standard]==0.32.1",
+    "python-multipart==0.0.17",
+    "pydantic==2.10.3",
+    "pydantic-settings==2.6.1",
+    "google-generativeai==0.8.3",
+    "google-api-core==2.23.0",
+    "python-json-logger==3.2.1",
+    "httpx==0.28.1",
+    "aiofiles==24.1.0",
+    "python-dotenv==1.0.1"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.3.4",
+    "pytest-asyncio==0.24.0",
+    "pytest-cov==6.0.0",
+    "pytest-mock==3.14.0",
+    "httpx==0.28.1",
+    "black==24.10.0",
+    "isort==5.13.2",
+    "flake8==7.1.1",
+    "mypy==1.13.0",
+    "pre-commit==4.0.1"
+]
+docs = [
+    "mkdocs==1.6.1",
+    "mkdocs-material==9.5.47",
+    "mkdocstrings[python]==0.27.0"
+]
+test = [
+    "pytest==8.3.4",
+    "pytest-asyncio==0.24.0",
+    "pytest-cov==6.0.0",
+    "pytest-mock==3.14.0",
+    "coverage[toml]==7.6.9"
+]
+
+[project.urls]
+Homepage = "https://github.com/seu-usuario/intent-classifier-api"
+Documentation = "https://github.com/seu-usuario/intent-classifier-api#readme"
+Repository = "https://github.com/seu-usuario/intent-classifier-api"
+Issues = "https://github.com/seu-usuario/intent-classifier-api/issues"
+
+[project.scripts]
+intent-api = "src.main:main"
+
+
+# Black - Code Formatter
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+# isort - Import Sorter
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+skip_gitignore = true
+known_first_party = ["src"]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+
+# pytest - Testing Framework
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+    "--cov=src",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--asyncio-mode=auto"
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "e2e: marks tests as end-to-end tests"
+]
+asyncio_mode = "auto"
+
+# Coverage
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/virtualenv/*"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod"
+]
+precision = 2
+show_missing = true
+
+# mypy - Type Checker
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+disallow_untyped_decorators = false
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+pretty = true
+show_error_codes = true
+show_error_context = true
+show_column_numbers = true
+
+[[tool.mypy.overrides]]
+module = [
+    "google.generativeai.*",
+    "google.api_core.*",
+    "pythonjsonlogger.*"
+]
+ignore_missing_imports = true
+
+# Ruff - Linter (alternativa ao flake8)
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "C",   # flake8-comprehensions
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long (handled by black)
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.ruff.isort]
+known-first-party = ["src"]
+
+# Bandit - Security Linter
+[tool.bandit]
+exclude_dirs = ["tests", "venv", ".venv"]
+skips = ["B101", "B601"]
+
+# setuptools
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+exclude = ["tests*", "docs*"]

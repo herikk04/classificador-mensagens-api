@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: intent-classifier-api
+    image: intent-classifier-api:latest
+    restart: unless-stopped
+    
+    ports:
+      - "${PORT:-8000}:8000"
+    
+    environment:
+      - APP_NAME=${APP_NAME:-Intent Classifier API}
+      - APP_VERSION=${APP_VERSION:-1.0.0}
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - DEBUG=${DEBUG:-true}
+      - HOST=0.0.0.0
+      - PORT=8000
+      - RELOAD=${RELOAD:-false}
+      
+      - GEMINI_API_KEY=${GEMINI_API_KEY:?GEMINI_API_KEY is required}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.5-flash}
+      - GEMINI_TEMPERATURE=${GEMINI_TEMPERATURE:-0.3}
+      - GEMINI_MAX_TOKENS=${GEMINI_MAX_TOKENS:-512}
+      - GEMINI_TIMEOUT=${GEMINI_TIMEOUT:-30}
+      
+      - EXAMPLES_FILE_PATH=${EXAMPLES_FILE_PATH:-src/data/examples.json}
+      - MAX_EXAMPLES_IN_PROMPT=${MAX_EXAMPLES_IN_PROMPT:-5}
+      
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_FORMAT=${LOG_FORMAT:-json}
+      
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
+      - CORS_ALLOW_CREDENTIALS=${CORS_ALLOW_CREDENTIALS:-true}
+      - CORS_ALLOW_METHODS=${CORS_ALLOW_METHODS:-*}
+      - CORS_ALLOW_HEADERS=${CORS_ALLOW_HEADERS:-*}
+      
+      - RATE_LIMIT_ENABLED=${RATE_LIMIT_ENABLED:-true}
+      - RATE_LIMIT_REQUESTS=${RATE_LIMIT_REQUESTS:-100}
+    
+    volumes:
+      - ./src:/app/src:ro
+      - ./logs:/app/logs
+      - ./src/data:/app/src/data:ro
+    
+    networks:
+      - intent-classifier-network
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.intent-api.rule=Host(`api.localhost`)"
+      - "traefik.http.services.intent-api.loadbalancer.server.port=8000"
+
+  api-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: intent-classifier-api-dev
+    image: intent-classifier-api:dev
+    restart: unless-stopped
+    
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload --log-level debug
+    
+    ports:
+      - "8000:8000"
+    
+    environment:
+      - APP_NAME=Intent Classifier API (Dev)
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - RELOAD=true
+      - GEMINI_API_KEY=${GEMINI_API_KEY:?GEMINI_API_KEY is required}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.5-flash}
+      - LOG_LEVEL=DEBUG
+      - LOG_FORMAT=text
+    
+    volumes:
+      - ./src:/app/src
+      - ./logs:/app/logs
+    
+    networks:
+      - intent-classifier-network
+    
+    profiles:
+      - dev
+
+networks:
+  intent-classifier-network:
+    driver: bridge
+    name: intent-classifier-network
+
+volumes:
+  logs-data:
+    driver: local
+    name: intent-classifier-logs
