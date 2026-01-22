@@ -1,0 +1,245 @@
+{
+  "examples": [
+    {
+      "user_input": "Olá, bom dia!",
+      "intent": "greeting",
+      "confidence": 0.98,
+      "metadata": {
+        "language": "pt-BR",
+        "context": "formal"
+      }
+    },
+    {
+      "user_input": "Oi, tudo bem?",
+      "intent": "greeting",
+      "confidence": 0.95,
+      "metadata": {
+        "language": "pt-BR",
+        "context": "informal"
+      }
+    },
+    {
+      "user_input": "Até logo, obrigado!",
+      "intent": "farewell",
+      "confidence": 0.97,
+      "metadata": {
+        "language": "pt-BR"
+      }
+    },
+    {
+      "user_input": "Tchau, até mais!",
+      "intent": "farewell",
+      "confidence": 0.96,
+      "metadata": {
+        "language": "pt-BR",
+        "context": "informal"
+      }
+    },
+    {
+      "user_input": "Como faço para rastrear meu pedido?",
+      "intent": "question",
+      "confidence": 0.94,
+      "metadata": {
+        "language": "pt-BR",
+        "category": "tracking"
+      }
+    },
+    {
+      "user_input": "Qual é o prazo de entrega?",
+      "intent": "question",
+      "confidence": 0.93,
+      "metadata": {
+        "language": "pt-BR",
+        "category": "delivery"
+      }
+    },
+    {
+      "user_input": "Meu produto chegou com defeito!",
+      "intent": "complaint",
+      "confidence": 0.96,
+      "metadata": {
+        "language": "pt-BR",
+        "sentiment": "negative"
+      }
+    },
+    {
+      "user_input": "Estou muito insatisfeito com o atendimento",
+      "intent": "complaint",
+      "confidence": 0.95,
+      "metadata": {
+        "language": "pt-BR",
+        "sentiment": "negative"
+      }
+    },
+    {
+      "user_input": "Adorei o produto, muito obrigado!",
+      "intent": "compliment",
+      "confidence": 0.97,
+      "metadata": {
+        "language": "pt-BR",
+        "sentiment": "positive"
+      }
+    },
+    {
+      "user_input": "Excelente atendimento, parabéns!",
+      "intent": "compliment",
+      "confidence": 0.98,
+      "metadata": {
+        "language": "pt-BR",
+        "sentiment": "positive"
+      }
+    },
+    {
+      "user_input": "Gostaria de solicitar a troca do produto",
+      "intent": "request",
+      "confidence": 0.94,
+      "metadata": {
+        "language": "pt-BR",
+        "action": "exchange"
+      }
+    },
+    {
+      "user_input": "Preciso alterar o endereço de entrega",
+      "intent": "request",
+      "confidence": 0.93,
+      "metadata": {
+        "language": "pt-BR",
+        "action": "update_address"
+      }
+    },
+    {
+      "user_input": "Meu pedido é o número 12345",
+      "intent": "information",
+      "confidence": 0.92,
+      "metadata": {
+        "language": "pt-BR",
+        "type": "order_number"
+      }
+    },
+    {
+      "user_input": "Meu CPF é 123.456.789-00",
+      "intent": "information",
+      "confidence": 0.91,
+      "metadata": {
+        "language": "pt-BR",
+        "type": "identification"
+      }
+    },
+    {
+      "user_input": "Preciso de ajuda com meu cadastro",
+      "intent": "help",
+      "confidence": 0.95,
+      "metadata": {
+        "language": "pt-BR",
+        "category": "registration"
+      }
+    },
+    {
+      "user_input": "Pode me ajudar a resolver isso?",
+      "intent": "help",
+      "confidence": 0.94,
+      "metadata": {
+        "language": "pt-BR"
+      }
+    },
+    {
+      "user_input": "Quero cancelar minha compra",
+      "intent": "cancellation",
+      "confidence": 0.97,
+      "metadata": {
+        "language": "pt-BR",
+        "action": "cancel_order"
+      }
+    },
+    {
+      "user_input": "Gostaria de cancelar meu pedido número 54321",
+      "intent": "cancellation",
+      "confidence": 0.96,
+      "metadata": {
+        "language": "pt-BR",
+        "action": "cancel_order"
+      }
+    },
+    {
+      "user_input": "Sim, confirmo o pedido",
+      "intent": "confirmation",
+      "confidence": 0.95,
+      "metadata": {
+        "language": "pt-BR",
+        "response": "affirmative"
+      }
+    },
+    {
+      "user_input": "Está correto, pode prosseguir",
+      "intent": "confirmation",
+      "confidence": 0.94,
+      "metadata": {
+        "language": "pt-BR",
+        "response": "affirmative"
+      }
+    },
+    {
+      "user_input": "Por favor, me envie o boleto",
+      "intent": "request",
+      "confidence": 0.93,
+      "metadata": {
+        "language": "pt-BR",
+        "action": "send_document"
+      }
+    },
+    {
+      "user_input": "Quando vai chegar meu produto?",
+      "intent": "question",
+      "confidence": 0.92,
+      "metadata": {
+        "language": "pt-BR",
+        "category": "delivery"
+      }
+    },
+    {
+      "user_input": "Não recebi meu pedido ainda",
+      "intent": "complaint",
+      "confidence": 0.94,
+      "metadata": {
+        "language": "pt-BR",
+        "category": "delivery_issue"
+      }
+    },
+    {
+      "user_input": "Como posso alterar minha senha?",
+      "intent": "question",
+      "confidence": 0.93,
+      "metadata": {
+        "language": "pt-BR",
+        "category": "account"
+      }
+    },
+    {
+      "user_input": "Preciso de suporte técnico urgente",
+      "intent": "help",
+      "confidence": 0.96,
+      "metadata": {
+        "language": "pt-BR",
+        "urgency": "high"
+      }
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "created_at": "2026-01-22",
+    "language": "pt-BR",
+    "total_examples": 25,
+    "intent_distribution": {
+      "greeting": 2,
+      "farewell": 2,
+      "question": 4,
+      "complaint": 3,
+      "compliment": 2,
+      "request": 3,
+      "information": 2,
+      "help": 3,
+      "cancellation": 2,
+      "confirmation": 2
+    }
+  }
+}
